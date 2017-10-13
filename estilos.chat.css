@@ -1,0 +1,87 @@
+.chat {
+	position: fixed;
+	left: 2rem;
+	top: 15%;
+	padding: .5rem;
+	opacity: .3;
+	width: 15rem;
+	height: 25rem;
+	max-width: 25%;
+	max-height: 50%;
+	border: 2px solid #000;
+	overflow: hidden;
+	border-radius: .5rem;
+	background: #999;
+	z-index: 200;
+}
+
+.chat > div {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-basis: auto;
+	flex-direction: column;
+}
+
+.chat:hover {
+	opacity: 1;
+}
+
+.chat > div > * {
+	margin-bottom: .1rem;
+}
+
+.chat .txt, .chat input {
+	border-radius: .25rem;
+}
+
+.chat h1 {
+	font-size: small;
+	margin: 0;
+	text-align: center;
+}
+
+.chat .txt {
+	overflow-y: auto;
+	background: #efefef;
+	padding: .25rem;
+	text-align: left;
+	flex: 6;
+}
+
+.chat .txt > div {
+	margin-top: .9rem;
+}
+
+.chat .txt > div.l {
+	text-align: right;
+}
+
+.chat .txt > div > span {
+	padding: .2rem;
+	border: 2px solid #888;
+	border-radius: .5rem;
+	background: #fff;
+	display: inline-block;
+}
+
+.chat .txt > div.l > span {
+	border-color: blue;
+}
+
+.chat form {
+	bottom: .5rem;
+	display: flex;
+}
+
+.chat form > * {
+	display: inline-block;
+}
+
+.chat form > *:first-child {
+	flex: 6;
+	height: 1.5rem;
+	width: 100%;
+    margin-right: .2rem;
+}

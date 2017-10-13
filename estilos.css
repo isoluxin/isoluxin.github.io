@@ -1,0 +1,321 @@
+body {
+	font-family: sans-serif;
+	background: #eee;
+	margin: 0;
+	padding: 0;
+}
+
+.templates {
+	display: none;
+}
+
+section, aside > div, .cam {
+	background: #ccc;
+}
+
+.cams {
+	position: absolute;
+	top: 0;
+	left: 2rem;
+	right: 0;
+	bottom: 0;
+	text-align: center;
+}
+
+.cam {
+	position: relative;
+	display: inline-block;
+	overflow: hidden;
+	width: 49%;
+	height: 49%;
+	border-left: .4rem solid transparent;
+	text-align: right;
+}
+
+.cam.max {
+	position: fixed;
+	display: block;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 2rem;
+	width: 100%;
+	height: 100%;
+	z-index: 100;
+}
+
+.cam.on { border-color: lime; }
+.cam.on.lv { border-color: red; }
+.cam.on.plv { border-color: gold; }
+
+.cam > * {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+.remoteVideo {
+	display: inline-block;
+	height: 100%;
+	width: auto;
+	max-width: 100%;
+	background: linear-gradient(to right, rgba(184,198,223,1) 0%,rgba(146,159,181,1) 100%);
+}
+
+.cam > nav {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+div.row {
+	display: flex;
+	justify-content: center;
+	flex-basis: auto;
+	flex: 1;
+}
+
+.cam > nav > div > button {
+	flex: 1;
+}
+
+.cam button {
+	display: table-cell;
+	background: transparent;
+	font-size: 2rem;
+	opacity: 0;
+}
+
+.cam button:hover {
+	opacity: 1 !important;
+	color: gold;
+	background: radial-gradient(ellipse at center, rgba(0,0,0,0.25) 0%,rgba(0,0,0,0) 50%);
+}
+
+.cam button.bl {
+	color: red;
+	opacity: .5;
+	background: rgba(255, 194, 0, 0.3);
+}
+
+.config, .botones {
+	display: none;
+}
+
+#localVideo {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 12rem;
+	min-height: auto;
+	z-index: 500;
+	transition: width .35s ease;
+}
+
+#localVideo.ch {
+	left: inherit;
+	right: 0;
+}
+
+#localVideo.max {
+	width: 60%;
+}
+
+#localVideo:hover {
+	opacity: .01;
+}
+
+button {
+	border: none;
+	font-size: large;
+	outline: none;
+	cursor: pointer;
+	background: #eee;
+}
+
+button:hover {
+	opacity: .5;
+}
+
+button.on {
+	background: #0f0;
+}
+
+aside > nav > * {
+	display: block;
+    padding: .5rem 0;
+    width: 2rem;
+    margin: .25rem 0;
+	text-align: center;
+	text-decoration: none;
+}
+
+aside > nav > .rot {
+	font-size: x-small;
+	transform: rotate(-90deg);
+	direction: rtl;
+	white-space: nowrap;
+}
+
+.rot > * {
+	display: inline-block;
+	direction: initial;
+	margin: 0 .25rem;
+}
+
+.rot > *:first-child {
+	font-size: small;
+}
+
+aside > div {
+	display: none;
+	position: absolute;
+	left: 2rem;
+	top: 15%;
+	padding: .5rem;
+	opacity: .3;
+	overflow-y: scroll;
+	max-height: 25rem;
+	font-size: .75rem;
+	text-align: center;
+	z-index: 200;
+}
+
+aside > div.on {
+	display: block;
+}
+
+aside > div:hover {
+	opacity: 1;
+}
+
+aside > nav.sv {
+	border-top: 5px solid #9c27b0;
+}
+
+#lanza {
+	font-size: large;
+	overflow: hidden;
+}
+
+nav:not(.lim) > #lanza {
+	height: 0;
+	padding: .15rem 0;
+}
+
+#lanza:hover {
+	height: auto !important;
+}
+
+nav.lim > #lanza {
+	display: inline-block;
+	background: red;
+}
+
+nav.lim > #onoff:not(.on) {
+	display: none;
+}
+
+nav.lim #onoff.on {
+    background: gold;
+}
+
+#seguro {
+	font-size: x-small;
+	padding: .25rem 0;
+}
+
+.onoff::before,
+.cam .onoff::before {
+	content: '\25BA';
+}
+
+.onoff.on::before,
+.cam.on .onoff::before {
+	content: '\25FC';
+}
+
+.clon.on.wn {
+	background: gold;
+}
+
+div.clon {
+	display: none !important;
+}
+
+.clon.on {
+	display: block !important;
+}
+
+:focus {outline:none;}
+::-moz-focus-inner {border:0;}
+
+#historialLog,
+.log > div {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+	text-align: initial;
+}
+
+#historialLog > li {
+	margin: .5rem 0;
+	padding: .5rem;
+	max-height: 3rem;
+    overflow: hidden;
+}
+
+#historialLog > li:hover {
+    background: #eee;
+}
+
+#historialLog > li.short {
+	background: #b79dbb;
+}
+
+#historialLog > li.on {
+	background: #f9f5da;
+	max-height: inherit;
+}
+
+#historialLog .r::before {
+    content: '> ';
+}
+
+#est2 {
+	font-size: small;
+	text-align: left;
+}
+
+#est2 > span.on {
+	background: lime;
+}
+
+#est2 > span {
+	display: inline-block;
+	width: 1.35rem;
+	text-align: center;
+	border: 1px solid #ccc;
+}
+
+#onoff.wn {
+	border: 2px solid red !important;
+}
+
+.stat > *::before { margin-right: .2rem }
+.stat > *:nth-child(2)::before { content: "\2640" }
+.stat > *:nth-child(3)::before { content: "\264A" }
+.stat > *:nth-child(4)::before { content: "\2665" }
+.stat > *:nth-child(5)::before { content: "\26D4" }
+.stat > *:nth-child(6)::before { content: "\21BA" }
+.stat > *:nth-child(7)::before { content: "\26F9" }
+
+.cam:not(.max) button.rot {
+	display: none;
+}
+
+.rotar {
+	transform: rotate(180deg);
+}

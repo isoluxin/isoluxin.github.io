@@ -1,0 +1,98 @@
+.info {
+	height: 1.3rem;
+	overflow: hidden;
+	cursor: default;
+	text-align: left;
+	width: auto;
+	max-width: 75%;
+	white-space: nowrap;
+}
+
+.info:hover {
+	height: auto;
+	max-height: 6rem;
+	overflow-y: auto;
+	max-width: 100%;
+}
+
+.info > div {
+	padding: .1rem;
+	background: #ddd;
+}
+
+.info > div.g2 { background: #7affff; border-right: .5rem solid #7affff; }
+.info > div.g3 { background: #f538b6; border-right: .5rem solid #f538b6; }
+.info > div.sa { background: #666; color: #aaa; }
+.info > div.du { background: #f60; }
+.info > div.f { background: #ffeb3b !important; }
+.info > div.b {
+	background: #443d39 !important;
+    text-decoration: line-through;
+}
+
+.info > div.on {
+	margin-left: 1.5rem;
+	font-weight: bold;
+}
+
+.info > div.on::before {
+	content: '\21A3';
+    color: #00f;
+}
+
+.info > div::before {
+	padding: 0 .25rem;
+}
+
+.info > div.cv::before {
+    content: '\1f441';
+}
+
+.info > div.lv::before {
+	background: red;
+}
+
+.info > div.sa::before {
+	content: '\1F6AB';
+}
+
+.info > div.b::before {
+    content: '\26D4';
+}
+
+.info > div.d::before {
+	color: #fbff00;
+}
+
+.info > div:hover {
+	border-bottom: 2px solid red;
+}
+
+.info > div > span::before {
+	content: '\26AC';
+	margin-left: .05rem;
+}
+
+.info > div > span:first-child::before {
+	content: '';
+}
+
+.info span.ext {
+	display: none;
+}
+
+.info:hover span.ext {
+	display: inline;
+}
+
+.info span.min {
+	font-size: small;
+}
+
+.p1 { background: #0f3; }
+.p2 { background: #ff6; }
+.p3 { background: #f66; }
+
+.tachado {
+	text-decoration: line-through;
+}
