@@ -1,4 +1,4 @@
-const RAIZ = "https://localhost:3443/chiji/";
+const RAIZ = "https://isoluxin.github.io/";
 const CL_C = "c";
 const CL_ON = "on";
 const CL_MAX = "max";
