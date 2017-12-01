@@ -127,7 +127,8 @@ const audio5 = new Audio(RAIZ + "COMM_SqueeChirp.ogg");
 
 function iniciar () {
     $(SL_LOCALV).insertAfter($(".cams"));
-	$(SL_LOCALV)[0] ? $(SL_LOCALV)[0].play() : "";
+	//$(SL_LOCALV)[0] ? $(SL_LOCALV)[0].play() : "";
+	RLTS[0].requestLocalCamera();
     $(SL_ONOFF).on(EV_CLICK, function () {
 		let $boton = $(this);
         let apagar = $boton.hasClass(CL_ON);
