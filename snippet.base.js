@@ -88,11 +88,11 @@ const COUNTRIES = {
 
 	/* 3 */
 	"FR": {"p": 3},
-	"PT": {"p": 3},
+	"PT": {"p": 3, "h": 0},
 	"AD": {"p": 3, "n": "Andorra"},
 	"IT": {"p": 3},
-	"GB": {"p": 3, "h": 1, "n": "GB"},
-	"IE": {"p": 3, "h": 1, "n": "Ireland"},
+	"GB": {"p": 3, "h": 0, "n": "GB"},
+	"IE": {"p": 3, "h": 0, "n": "Ireland"},
 	"US": {"p": 3, "h": -4},
 	"CA": {"p": 3, "h": -6},
 	"MZ": {"p": 3, "n": "Mozambique"},
@@ -664,6 +664,7 @@ function mostrarInfo (index, obj) {
         .append(newTag(TG_NEWSPAN, obj.t.length === 0 ? null :
             getUltimoVisto(ahora.getTime(), obj.t[obj.t.length - 1])))
 		.append(newTag(TG_NEWSPAN, obj.o > 0 ? "&#128336; " + (obj.o / 60).toFixed(1) : null))
+		.append(newTag(TG_NEWSPAN, obj.n === "firefox" ? "FF" : null))
         .attr(AT_TITLE, obj.s + ", " + obj.n + ", " + obj.i + "\n" + getConexiones(obj.t))
         .on(EV_CLICK, function () {
             $(this).toggleClass(CL_ON);
