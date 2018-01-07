@@ -170,7 +170,7 @@ function iniciar () {
 		persistirDatos();
 		setTimeout(function () {
 			window.close();
-		}, 5000);
+		}, 7000);
 	});
 
 	$("#camara").on(EV_CLICK, function () {
