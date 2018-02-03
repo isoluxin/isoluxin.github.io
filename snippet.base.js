@@ -44,7 +44,7 @@ const HORA = 3600000;
 const T_RET = 900000;
 
 const TOTAL = window.count || 4;
-const SES_LIM = 105;
+const SES_LIM = 115;
 var RLTS = window.all || [];
 var CONN = [];
 var RMAX = [];
@@ -82,7 +82,7 @@ const COUNTRIES = {
 	"HN": {"p": 2, "h": -6, "n": "Honduras", "l": 1},
 	"PY": {"p": 2, "h": -4, "n": "Paraguay", "l": 1},
 	"SV": {"p": 2, "h": -6, "n": "El Salvador", "l": 1},
-	//"--": {"p": 2, "h": -6, "n": "Guatemala"},
+	"GT": {"p": 2, "h": -6, "n": "Guatemala", "l": 1},
 	"DO": {"p": 2, "h": -4, "l": 1},
 	"BR": {"p": 2, "h": -3, "l": 0},
 
@@ -937,7 +937,7 @@ function historial () {
 					.data(DT_ID, clave)
 					.append(newTag(TG_NEWDIV, clave))
 					.append(JSON.parse(localStorage[clave]))
-					.addClass(localStorage[clave].length < 400 ? "short" : "")
+					.addClass(localStorage[clave].length < 600 ? "short" : "")
 					.on(EV_CLICK, function () {
 						$(this).toggleClass(CL_ON);
 					})
@@ -945,7 +945,7 @@ function historial () {
 		}
 	}
 	$historial.next().off(EV_CLICK).on(EV_CLICK, function () {
-		let $reg = $("#historialLog li." + CL_ON);
+		let $reg = $("#historialLog li.short, #historialLog li." + CL_ON);
 		$reg.each(function () {
 			localStorage.removeItem($(this).data(DT_ID));
 		});
