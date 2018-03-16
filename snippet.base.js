@@ -170,7 +170,7 @@ function iniciar () {
 		persistirDatos();
 		setTimeout(function () {
 			window.close();
-		}, 7000);
+		}, 7500);
 	});
 
 	$("#camara").on(EV_CLICK, function () {
@@ -268,7 +268,7 @@ function maximizar (e) {
 		$(SL_CAMC + index + " .chat").addClass(CL_ON);
 		window.tSeguro = setTimeout(function () {
 			$("#seguro").addClass(CL_ON);
-		}, 2500);
+		}, 5000);
 	} else {
 		clearTimeout(window.tSeguro);
 		$("#seguro").removeClass(CL_ON);
@@ -457,7 +457,7 @@ function rltControl (index) {
 		console.log("RLT" + index, status, CONN[index], data);
 		switch (status) {
 			case 'peerFound':
-				camSesion++;
+				camSesion += 0.5;
                 if (camSesion === SES_LIM) {
 					$(SL_ASIDENAV).addClass("lim");
                 }
@@ -482,6 +482,7 @@ function rltControl (index) {
                 break;
 			case 'connected':
 				controlSalta(index);
+				camSesion += 0.5;
                 if (CONN[index]) {
                     //console.log("onStatus-connected", CONN[index]);
                     postConnect(leerDatos(CONN[index]), index);
@@ -587,21 +588,23 @@ function idSimilar(id) {
 function cargarDatosPersistidos () {
 	let datos = localStorage[LS_ALMACEN];
 	datos = datos ? JSON.parse(datos) : {};
-	const tCache = HORA * 11;
 	let ahora = new Date().getTime();
-    for (let key of Object.keys(datos)) {
-        let obj = datos[key];
-		let maxT = (obj.e !== ES_FAV) ? tCache : HORA * 360;
-        if ((obj && !Array.isArray(obj.t)) ||
-                (obj && obj.t.length === 0 && obj.e !== ES_FAV && obj.e !== ES_BAN) ||
-                (obj && (ahora - obj.t[obj.t.length - 1] > maxT))) {
-			//console.info("Borrando:", obj);
-            delete datos[key];
-        }
-        if (!Array.isArray(obj.t) || obj.t.length === 0) {
-        	obj.t = [ahora];
-        }
-    }
+	if (ahora % 3 === 0) {
+		const tCache = HORA * 17;
+		for (let key of Object.keys(datos)) {
+			let obj = datos[key];
+			let maxT = (obj.e !== ES_FAV) ? tCache : HORA * 480;
+			if ((obj && !Array.isArray(obj.t)) ||
+					(obj && obj.t.length === 0 && obj.e !== ES_FAV && obj.e !== ES_BAN) ||
+					(obj && (ahora - obj.t[obj.t.length - 1] > maxT))) {
+				//console.info("Borrando:", obj);
+				delete datos[key];
+			}
+			if (!Array.isArray(obj.t) || obj.t.length === 0) {
+				obj.t = [ahora];
+			}
+		}
+	}
 	ALMACEN = datos;
 	persistirDatos();
 	estadisticas();
@@ -612,7 +615,7 @@ function persistirDatos () {
 	$(SL_ASIDENAV).addClass("sv");
 	setTimeout(function () {
     	$(SL_ASIDENAV).removeClass("sv");
-	}, 500);
+	}, 750);
 }
 
 /*  ************************   */
