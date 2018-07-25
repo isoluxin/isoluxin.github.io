@@ -1,0 +1,37 @@
+header, .top_btn, .at-share-dock-outer, #water_mrk, .scontent, 
+section, footer, #grl_btn, #rpt_btn, .full_btn trns, .cntr_wrap {
+    display: none !important;
+}
+
+.chat_div {
+    width: 25%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+video {
+    position: fixed !important;
+}
+
+#remoteVideo {
+    top: 0;
+    right: 25%;
+    bottom: 0;
+    width: auto;
+    max-width: 80%;
+}
+
+#localVideo {
+    bottom: 0;
+    width: 18rem;
+    height: auto;
+    z-index: 10;
+}
+
+.cams_wrap {
+    width: 1px;
+    border: none;
+    padding: 0;
+}

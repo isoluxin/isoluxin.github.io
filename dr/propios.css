@@ -1,0 +1,7 @@
+#localVideo.max {
+	width: 60%;
+}
+
+#localVideo:hover {
+	opacity: .01;
+}
