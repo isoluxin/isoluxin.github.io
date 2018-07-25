@@ -1,6 +1,6 @@
 (function () {
 
-    const RAIZ = "https://isoluxin.github.io/dr";
+    const RAIZ = "https://isoluxin.github.io/dr/";
     const CSS = [
         "defacing.css",
         "propios.css"
