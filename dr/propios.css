@@ -1,7 +1,17 @@
+body {
+    background: #323232;
+}
+
 #localVideo.max {
 	width: 60%;
 }
 
 #localVideo:hover {
 	opacity: .01;
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    width: 3rem;
 }
