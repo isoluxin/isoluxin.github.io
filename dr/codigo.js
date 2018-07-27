@@ -128,6 +128,14 @@
         rlt.setPreferredGender("f");
         rlt.onStatus = function (status, data) {
             console.log("rltController::onStatus", status, data);
+            if (status === "connected") {
+                $("#flag")
+                    .html(data.Country + " - " + data.State)
+                    .removeClass(function (index, className) {
+                        return (className.match (/(^|\s)flag-\S+/g) || []).join(' ');
+                    })
+                    .addClass("flag-" + data.Country.toLowerCase());
+            }
         };
     }
 

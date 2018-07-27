@@ -13,6 +13,7 @@ section, footer, #grl_btn, #rpt_btn, .full_btn trns, .cntr_wrap {
 
 video {
     position: fixed !important;
+    display: block !important;
 }
 
 #remoteVideo {
