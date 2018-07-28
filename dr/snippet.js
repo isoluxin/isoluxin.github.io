@@ -10,7 +10,7 @@
         for (let css of CSS) {
             $("head").append('<link type="text/css" rel="stylesheet" href="' + RAIZ + css + '" />');
         }
-        $.getScript(RAIZ + "codigo.js");
+        $.getScript(RAIZ + "codigo.js?t=" + Date.now());
     }
 
     $(document).ready(function() {

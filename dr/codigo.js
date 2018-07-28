@@ -1,7 +1,5 @@
 (function () {
 
-    console.log("hola codigo");
-
     const RAIZ = "https://isoluxin.github.io/";
 
     const TG_NEWOPTION = "<option>";
@@ -79,6 +77,9 @@
                 .append($("<button>"))
                 .append(crearComboPaises())
         );
+        $("#localVideo").on("click", function () {
+            $(this).toggleClass("max");
+        });
     }());
 
     (function iniciar () {
@@ -129,6 +130,7 @@
         rlt.onStatus = function (status, data) {
             console.log("rltController::onStatus", status, data);
             if (status === "connected") {
+                $("#remoteVideo").show();
                 $("#flag")
                     .html(data.Country + " - " + data.State)
                     .removeClass(function (index, className) {
