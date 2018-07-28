@@ -137,6 +137,11 @@
                         return (className.match (/(^|\s)flag-\S+/g) || []).join(' ');
                     })
                     .addClass("flag-" + data.Country.toLowerCase());
+                $("#gender")
+                    .removeClass(function (index, className) {
+                        return (className.match (/(^|\s)gndr_\S+/g) || []).join(' ');
+                    })
+                    .addClass("gndr_" + (data.Gender === 'f' ? 'female' : (data.Gender === 'c' ? 'couple' : 'male')));
             }
         };
     }
