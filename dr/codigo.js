@@ -68,13 +68,13 @@
     var RLTS = [];
 
     (function generarGui () {
+        document.title = "Document";
         $("body").append(
             $("<nav>")
                 .append($('<div id="contador">'))
-                .append($("<button>"))
-                .append($("<button>"))
-                .append($("<button>"))
-                .append($("<button>"))
+                .append($('<button data-f="">F-T</button>').on("click", filtrarPorGenero))
+                .append($('<button data-f="f">F-F</button>').on("click", filtrarPorGenero))
+                .append($('<button data-f="c">F-C</button>').on("click", filtrarPorGenero))
                 .append(crearComboPaises())
         );
         $("#localVideo").on("click", function () {
@@ -126,7 +126,7 @@
     }
 
     function rltController (rlt) {
-        rlt.setPreferredGender("f");
+        //rlt.setPreferredGender("f");
         rlt.onStatus = function (status, data) {
             console.log("rltController::onStatus", status, data);
             if (status === "connected") {
@@ -144,6 +144,13 @@
                     .addClass("gndr_" + (data.Gender === 'f' ? 'female' : (data.Gender === 'c' ? 'couple' : 'male')));
             }
         };
+    }
+
+    function filtrarPorGenero () {
+        var g = $(this).data("f");
+        for (let rlt of RLTS) {
+            rlt.setPreferredGender(g);
+        }
     }
 
 }());
