@@ -1,8 +1,9 @@
 (function () {
 
-    const RAIZ = "https://isoluxin.github.io/";
+    const RAIZ = location.protocol === "file:" ? "../" : "https://isoluxin.github.io/";
 
     const TG_NEWOPTION = "<option>";
+    const CL_ON = "on";
 
     const COUNTRIES = {
         /* 1 */
@@ -50,7 +51,7 @@
         "AU": {"h": 10}
     };
 
-    const GENEROS = {"m": 1, "male": 1, "c": 2, "couple": 2, "f": 3, "female": 3};
+    const GENEROS = {"m": "male", "c": "couple", "f": "female"};
 
     const TXTS = [
         ["hi", "hola"],
@@ -72,42 +73,52 @@
         $("body").append(
             $("<nav>")
                 .append($('<div id="contador">'))
+                .append($('<button>C-CH</button>').on("click", function () {
+                    //TODO changeCamera
+                }))
+                .append($('<button class="on">C-ON</button>').on("click", function () {
+                    $(this).toggleClass(CL_ON);
+                    //TODO toggleVideo
+                }))
+                .append($('<button class="on">A-ON</button>').on("click", function () {
+                    $(this).toggleClass(CL_ON);
+                    //TODO toggleAudio
+                }))
                 .append($('<button data-f="">F-T</button>').on("click", filtrarPorGenero))
                 .append($('<button data-f="f">F-F</button>').on("click", filtrarPorGenero))
                 .append($('<button data-f="c">F-C</button>').on("click", filtrarPorGenero))
                 .append(crearComboPaises())
-        );
+        ).append($('<div id="hud">'));
         $("#localVideo").on("click", function () {
             $(this).toggleClass("max");
         });
+
+        function filtrarPorGenero () {
+            aplicarRuletas("setPreferredGender", $(this).data("f"));
+        }
+
+        function crearComboPaises () {
+            var $select = $("<select>");
+            for (let p of Object.keys(COUNTRIES)) {
+                if (COUNTRIES[p].p) {
+                    $(TG_NEWOPTION).val(p).text(p).appendTo($select);
+                }
+            }
+            $(TG_NEWOPTION).val("").text("").appendTo($select);
+            $select.on("change", function () {
+                aplicarRuletas("setPreferredCountry", $(this).val().toUpperCase());
+            });
+            return $select;
+        }
     }());
 
     (function iniciar () {
-        RLTS.push(rlt);
+        RLTS.push(window.rlt || {});
         onlineCountries();
         for (let rlt of RLTS) {
             rltController(rlt);
         }
     }());
-    
-    function crearComboPaises () {
-        var $select = $("<select>");
-        for (let p of Object.keys(COUNTRIES)) {
-            if (COUNTRIES[p].p) {
-                $(TG_NEWOPTION).val(p).text(p).appendTo($select);
-            }
-        }
-	    $(TG_NEWOPTION).val("").text("").appendTo($select);
-        $select.on("change", cambioPais);
-        return $select;
-    }
-
-    function cambioPais () {
-        let a = $(this).val().toUpperCase();
-        for (let rlt of RLTS) {
-            rlt.setPreferredCountry(a);
-        }
-    }
 
     function onlineCountries () {
         $.getJSON("https://omecam.com/onlineCountries?room=Adult", function (data) {
@@ -126,31 +137,220 @@
     }
 
     function rltController (rlt) {
-        //rlt.setPreferredGender("f");
         rlt.onStatus = function (status, data) {
-            console.log("rltController::onStatus", status, data);
-            if (status === "connected") {
-                $("#remoteVideo").show();
-                $("#flag")
-                    .html(data.Country + " - " + data.State)
-                    .removeClass(function (index, className) {
-                        return (className.match (/(^|\s)flag-\S+/g) || []).join(' ');
-                    })
-                    .addClass("flag-" + data.Country.toLowerCase());
-                $("#gender")
-                    .removeClass(function (index, className) {
-                        return (className.match (/(^|\s)gndr_\S+/g) || []).join(' ');
-                    })
-                    .addClass("gndr_" + (data.Gender === 'f' ? 'female' : (data.Gender === 'c' ? 'couple' : 'male')));
+            switch (key) {
+                case "peerFound":
+                    console.log("rltController-peerFound", data);
+                    rlt.user = storage.get(data);
+                    rlt.iLocal = infoLocal(rlt.user);
+                    addToHud(rlt.user, rlt.iLocal);
+                    if (!controlConexion(rlt.user, data)) {
+                        rlt.reset();
+                    }
+                    break;
+
+                case "connected":
+                    if (!rlt.user || !rlt.iLocal) {
+                        console.error("rltController-connected: falta info!!", rlt.user, rlt.iLocal);
+                    }
+                    guiDRConnected(rlt.user, rlt.iLocal);
+                    audioConexion(rlt.user);
+                    conexionRealizada(rlt.user);
+                    break;
+
+                case "reset":
+                    guardarChat();
+                    rlt.user = null;
+                    rlt.iLocal = null;
+                    break;
+
+                default:
+                    break;
             }
+        };
+
+        rlt.onChat = function () {
+            audio4.play();
         };
     }
 
-    function filtrarPorGenero () {
-        var g = $(this).data("f");
-        for (let rlt of RLTS) {
-            rlt.setPreferredGender(g);
+    function guiDRConnected (user, iLocal) {
+        $("#remoteVideo").show();
+        $("#flag")
+            .html(iLocal.str)
+            .removeClass(function (index, className) {
+                return (className.match (/(^|\s)flag-\S+/g) || []).join(' ');
+            })
+            .addClass(`flag flag-${iLocal.pais.toLowerCase()}`);
+        $("#gender")
+            .removeClass(function (index, className) {
+                return (className.match (/(^|\s)gndr_\S+/g) || []).join(' ');
+            })
+            .addClass("gndr_" + GENEROS[user.ge]);
+    }
+
+    function controlConexion (user, data) {
+        if (user.bloq) {
+            return false;
+        }
+        return true;
+    }
+
+    function audioConexion (user) {
+        if (user.co === RLTS[0].localDescription().State) {  //TODO PROBAR
+            audio5.play();
+        } else if (user.ge === "f") {
+            audio3.play();
+        } else if (user.ge === "c") {
+            audio2.play();
+        } else {
+            audio1.play();
         }
     }
+
+    function conexionRealizada (user) {
+        user.cn = user.cn + 1;
+        user.vi.push(Date.now());
+        storage.set(user.id, null, user);
+        $("#hud > .row:first-child").addClass("vi");
+    }
+
+    function guardarChat () {
+        // TODO guardarChat
+
+        // Si hay más de 6 líneas, guardar
+        //storage.saveChat({});
+
+        // Limpiar chat
+    }
+
+    function aplicarRuletas (funcion, parametro) {
+        for (let rlt of RLTS) {
+            rlt[funcion](parametro);
+        }
+    }
+
+    function infoLocal (user) {
+        let pais = COUNTRIES[user.pa];
+        let paisStr = (pais && pais.n) ? pais.n : user.pa;
+        return {
+            str: function () {
+                return paisStr + (user.co ? (" (" + user.co) + ")" : "");
+            }(),
+            pais: user.pa,
+            paisStr: paisStr,
+            idioma: function () {
+                if (pais) {
+                    if (pais.l) {
+                        return pais.l;
+                    }
+                    if (pais.p < 3) {
+                        return 1;
+                    }
+                }
+                return 0;
+            }(),
+            hora: function () {
+                let ahora = new Date();
+                if (!(pais && pais.h)) {
+                    return ahora.toLocaleTimeString();
+                }
+                return diez(ahora.getUTCHours() + pais.h) + ":" + diez(ahora.getMinutes());
+            }()
+        };
+    }
+
+    function diez (s) {
+        return (s < 10 ? "0" : "") + s;
+    }
+
+    function addToHud (user, iLocal) {
+        $("#hud").append(
+            $("<div>")
+                .addClass("row")
+                .toggleClass("bl", user["bloq"] === true)
+                .toggleClass("fa", user["fav"] === true)
+                .toggleClass("sa", user["salt"] === true)
+                .data("id", user.id)
+                .html(`${iLocal.hora} ${user.ge.toUpperCase()} ${iLocal.str} ${user.id}`)
+                .append(`<a onclick="favorito(this);">F</a>`)
+                .append(`<a onclick="salta(this);">S</a>`)
+                .append(`<a onclick="bloquea(this);">B</a>`)
+                .attr("title", user.na)
+        );
+    }
+
+    window.favorito = function (e) {
+        let $p = $(e).parent();
+        $p.toggleClass("fa", marcar($p, "fav"));
+    };
+
+    window.salta = function (e) {
+        let $p = $(e).parent();
+        $p.toggleClass("sa", marcar($p, "salt"));
+    };
+
+    window.bloquea = function (e) {
+        let $p = $(e).parent();
+        $p.toggleClass("bl", marcar($p, "bloq"));
+    };
+
+    function marcar ($target, propiedad) {
+        var id = $target.data("id");
+        var obj = storage.set(id, propiedad);
+        return obj[propiedad];
+    }
+
+    window.storage = {
+        set: function (id, propiedad, valor) {
+            var user = window.storage.get({Id: id});
+            if (propiedad) {
+                user[propiedad] = valor ? valor : !user[propiedad];
+            } else {
+                user = valor;
+            }
+            //console.log("storage-set", user);
+            localStorage["dr_u_" + id] = JSON.stringify(user);
+            return user;
+        },
+        get: function (data) {
+            var user = localStorage["dr_u_" + data.Id];
+            if (user) {
+                return JSON.parse(user);
+            }
+            return {
+                id: data.Id,
+                ge: data.Gender,
+                pa: data.Country,
+                co: data.State,
+                na: data.UserAgent,
+                cn: 0,
+                vi: [],
+                sa: 0
+            };
+        },
+        saveChat: function (obj) {
+            var key = "dr_c_" + new Date().toJSON();
+            localStorage[key] = JSON.stringify(obj);
+            return key;
+        }
+    };
+/*
+    window.addHud = function () {
+        var simulacion = [
+            {Id: "564dsf564sd", Gender: "f", Country: "ES", State: "Madrid", UserAgent: "Gecko"},
+            {Id: "5646874ds8f", Gender: "f", Country: "ES", State: "Madrid", UserAgent: "Gecko"},
+            {Id: "231we5ds65d6s", Gender: "c", Country: "CL", State: "Valencia", UserAgent: "Gecko"}
+        ];
+        for (let data of simulacion) {
+            var user = storage.get(data);
+            //storage.set(user.id, null, user);
+            addToHud(user, infoLocal(user));
+        }
+    }
+
+    addHud();
+*/
+    //  TODO: on adv -> next
 
 }());

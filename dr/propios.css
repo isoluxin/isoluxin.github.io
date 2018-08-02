@@ -1,5 +1,6 @@
 body {
     background: #323232;
+    margin: 0;
 }
 
 #localVideo {
@@ -17,9 +18,79 @@ body {
 nav {
     position: fixed;
     top: 0;
+    left: -3.75rem;
     z-index: 20;
+}
+
+nav:hover {
+    left: 0;
 }
 
 nav > * {
     display: block;
+    width: 4rem;
+    margin-bottom: 5px;
+    height: 1.5rem;
+}
+
+nav > button {
+    border: 1px solid #888;
+    background-color: #eee;
+}
+
+.on {
+    background-color: lime !important;
+}
+
+.fa {
+    background-color: yellow !important;
+}
+
+.bl {
+    text-decoration: line-through;
+    background-color: #444 !important;
+}
+
+#hud {
+    position: fixed;
+    left: 5rem;
+    max-width: 35rem;
+    opacity: .15;
+    background-color: #fff;
+    overflow: hidden;
+    max-height: 1.25rem;
+    padding: .15rem;
+}
+
+#hud:hover {
+    opacity: 1;
+    overflow: auto;
+    max-height: 8rem;
+}
+
+.row {
+    padding: .15rem;
+    cursor: pointer;
+}
+
+.row:hover {
+    padding-left: .5rem;
+}
+
+.row:nth-child(2n) {
+    background-color: #bbb;
+}
+
+.row > a {
+    padding: 0 .35rem;
+}
+
+.row > a:hover {
+    background-color: blue;
+    color: #fff;
+}
+
+.vi::before {
+    content: '>';
+    margin-right: .5rem;
 }
