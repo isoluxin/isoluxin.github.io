@@ -172,9 +172,10 @@
         };
 
         var bakOnChat = rlt.onChat;
-        rlt.onChat = function () {
-            bakOnChat();
+        rlt.onChat = function (p1, p2) {
+            bakOnChat(p1, p2);
             audio4.play();
+            console.log("chat", p1, p2);
         };
     }
 
