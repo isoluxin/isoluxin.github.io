@@ -30,7 +30,8 @@ nav > * {
     display: block;
     width: 4rem;
     margin-bottom: 5px;
-    height: 1.5rem;
+    height: 1.75rem;
+    font-size: 1.2rem;
 }
 
 nav > button {
@@ -93,4 +94,9 @@ nav > button {
 .vi::before {
     content: '>';
     margin-right: .5rem;
+}
+
+#contador {
+    background-color: #bbb;
+    text-align: center;
 }

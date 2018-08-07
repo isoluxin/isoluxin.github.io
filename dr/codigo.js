@@ -138,7 +138,7 @@
 
     function rltController (rlt) {
         rlt.onStatus = function (status, data) {
-            switch (key) {
+            switch (status) {
                 case "peerFound":
                     console.log("rltController-peerFound", data);
                     rlt.user = storage.get(data);
