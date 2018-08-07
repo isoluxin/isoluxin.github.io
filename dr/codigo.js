@@ -171,7 +171,9 @@
             }
         };
 
+        var bakOnChat = rlt.onChat;
         rlt.onChat = function () {
+            bakOnChat();
             audio4.play();
         };
     }
