@@ -212,7 +212,7 @@
         user.cn = user.cn + 1;
         user.vi.push(Date.now());
         storage.set(user.id, null, user);
-        $("#hud > .row:first-child").addClass("vi");
+        $("#hud > .fila:first-child").addClass("vi");
     }
 
     function guardarChat () {
@@ -267,7 +267,7 @@
     function addToHud (user, iLocal) {
         $("#hud").append(
             $("<div>")
-                .addClass("row")
+                .addClass("fila")
                 .toggleClass("bl", user["bloq"] === true)
                 .toggleClass("fa", user["fav"] === true)
                 .toggleClass("sa", user["salt"] === true)

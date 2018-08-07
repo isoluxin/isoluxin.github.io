@@ -54,6 +54,7 @@ nav > button {
 
 #hud {
     position: fixed;
+    top: 0;
     left: 5rem;
     max-width: 35rem;
     opacity: .15;
@@ -61,6 +62,8 @@ nav > button {
     overflow: hidden;
     max-height: 1.25rem;
     padding: .15rem;
+    z-index: 10000;
+    font-size: small;
 }
 
 #hud:hover {
@@ -69,24 +72,24 @@ nav > button {
     max-height: 8rem;
 }
 
-.row {
+.fila {
     padding: .15rem;
     cursor: pointer;
 }
 
-.row:hover {
+.fila:hover {
     padding-left: .5rem;
 }
 
-.row:nth-child(2n) {
+.fila:nth-child(2n) {
     background-color: #bbb;
 }
 
-.row > a {
+.fila > a {
     padding: 0 .35rem;
 }
 
-.row > a:hover {
+.fila > a:hover {
     background-color: blue;
     color: #fff;
 }
