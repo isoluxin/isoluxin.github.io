@@ -74,15 +74,15 @@
             $("<nav>")
                 .append($('<div id="contador">'))
                 .append($('<button>C-CH</button>').on("click", function () {
-                    //TODO changeCamera
+                    aplicarRuletas("changeCamera");
                 }))
                 .append($('<button class="on">C-ON</button>').on("click", function () {
                     $(this).toggleClass(CL_ON);
-                    //TODO toggleVideo
+                    aplicarRuletas("setVideo", $(this).hasClass(CL_ON));
                 }))
                 .append($('<button class="on">A-ON</button>').on("click", function () {
                     $(this).toggleClass(CL_ON);
-                    //TODO toggleAudio
+                    aplicarRuletas("setAudio", $(this).hasClass(CL_ON));
                 }))
                 .append($('<button data-f="">F-T</button>').on("click", filtrarPorGenero))
                 .append($('<button data-f="f">F-F</button>').on("click", filtrarPorGenero))
@@ -94,6 +94,8 @@
         });
 
         function filtrarPorGenero () {
+            $("button[data-f]").removeClass(CL_ON);
+            $(this).addClass(CL_ON);
             aplicarRuletas("setPreferredGender", $(this).data("f"));
         }
 
@@ -216,12 +218,16 @@
     }
 
     function guardarChat () {
-        // TODO guardarChat
-
-        // Si hay más de 6 líneas, guardar
-        //storage.saveChat({});
-
-        // Limpiar chat
+        let $conversacion = $("#conversation");
+        let mensajes = $conversacion.children();
+        if (mensajes.length > 6) {
+            let contenido = "";
+            for (let mens of mensajes) {
+                contenido += mens.innerHTML;
+            }
+            storage.saveChat(contenido);
+        }
+        $conversacion.empty();
     }
 
     function aplicarRuletas (funcion, parametro) {
@@ -265,7 +271,7 @@
     }
 
     function addToHud (user, iLocal) {
-        $("#hud").append(
+        $("#hud").prepend(
             $("<div>")
                 .addClass("fila")
                 .toggleClass("bl", user["bloq"] === true)
@@ -323,7 +329,7 @@
                 ge: data.Gender,
                 pa: data.Country,
                 co: data.State,
-                na: data.UserAgent,
+                na: data.Browser + "|" + data.CamName,
                 cn: 0,
                 vi: [],
                 sa: 0
