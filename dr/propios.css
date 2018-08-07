@@ -60,7 +60,7 @@ nav > button {
     opacity: .15;
     background-color: #fff;
     overflow: hidden;
-    max-height: 1.25rem;
+    max-height: 2.5rem;
     padding: .15rem;
     z-index: 10000;
     font-size: small;
