@@ -4,6 +4,7 @@
 
     const TG_NEWOPTION = "<option>";
     const CL_ON = "on";
+    const EV_CLC = "click";
 
     const COUNTRIES = {
         /* 1 */
@@ -73,23 +74,23 @@
         $("body").append(
             $("<nav>")
                 .append($('<div id="contador">'))
-                .append($('<button>C-CH</button>').on("click", function () {
+                .append($('<button>C-CH</button>').on(EV_CLC, function () {
                     aplicarRuletas("changeCamera");
                 }))
-                .append($('<button class="on">C-ON</button>').on("click", function () {
+                .append($('<button class="on">C-ON</button>').on(EV_CLC, function () {
                     $(this).toggleClass(CL_ON);
                     aplicarRuletas("setVideo", $(this).hasClass(CL_ON));
                 }))
-                .append($('<button class="on">A-ON</button>').on("click", function () {
+                .append($('<button class="on">A-ON</button>').on(EV_CLC, function () {
                     $(this).toggleClass(CL_ON);
                     aplicarRuletas("setAudio", $(this).hasClass(CL_ON));
                 }))
-                .append($('<button data-f="">F-T</button>').on("click", filtrarPorGenero))
-                .append($('<button data-f="f">F-F</button>').on("click", filtrarPorGenero))
-                .append($('<button data-f="c">F-C</button>').on("click", filtrarPorGenero))
+                .append($('<button data-f="">F-T</button>').on(EV_CLC, filtrarPorGenero))
+                .append($('<button data-f="f">F-F</button>').on(EV_CLC, filtrarPorGenero))
+                .append($('<button data-f="c">F-C</button>').on(EV_CLC, filtrarPorGenero))
                 .append(crearComboPaises())
         ).append($('<div id="hud">'));
-        $("#localVideo").on("click", function () {
+        $("#localVideo").on(EV_CLC, function () {
             $(this).toggleClass("max");
         });
 
@@ -155,6 +156,10 @@
                     if (!rlt.user || !rlt.iLocal) {
                         console.error("rltController-connected: falta info!!", rlt.user, rlt.iLocal);
                     }
+                    if (rlt.idcnx === rlt.user.id) {
+                        break;
+                    }
+                    rlt.idcnx = rlt.user.id;
                     guiDRConnected(rlt.user, rlt.iLocal);
                     audioConexion(rlt.user);
                     conexionRealizada(rlt.user);
@@ -164,6 +169,7 @@
                     guardarChat();
                     rlt.user = null;
                     rlt.iLocal = null;
+                    rlt.idcnx = null;
                     break;
 
                 default:
@@ -175,7 +181,6 @@
         rlt.onChat = function (p1, p2) {
             bakOnChat(p1, p2);
             audio4.play();
-            console.log("chat", p1, p2);
         };
     }
 
@@ -198,6 +203,11 @@
         if (user.bloq) {
             return false;
         }
+        if (user.salt !== null && user.salt > 0) {
+            user.salt = user.salt - 1;
+            storage.set(user.id, null, user);
+            return false;
+        }
         return true;
     }
 
@@ -217,6 +227,7 @@
         user.cn = user.cn + 1;
         user.vi.push(Date.now());
         storage.set(user.id, null, user);
+        $("#hud > .fila.vi").removeClass("vi");
         $("#hud > .fila:first-child").addClass("vi");
     }
 
@@ -239,6 +250,10 @@
         }
     }
 
+    function aplicarRuleta (indice, funcion, parametro) {
+        RLTS[indice][funcion](parametro);
+    }
+
     function infoLocal (user) {
         let pais = COUNTRIES[user.pa];
         let paisStr = (pais && pais.n) ? pais.n : user.pa;
@@ -248,6 +263,7 @@
             }(),
             pais: user.pa,
             paisStr: paisStr,
+            paisCat: pais.p || 4,
             idioma: function () {
                 if (pais) {
                     if (pais.l) {
@@ -276,16 +292,18 @@
     function addToHud (user, iLocal) {
         $("#hud").prepend(
             $("<div>")
-                .addClass("fila")
+                .addClass(`fila g${user.ge.toUpperCase()}`)
                 .toggleClass("bl", user["bloq"] === true)
                 .toggleClass("fa", user["fav"] === true)
-                .toggleClass("sa", user["salt"] === true)
+                .toggleClass("sa", user["salt"] > 0)
                 .data("id", user.id)
-                .html(`${iLocal.hora} ${user.ge.toUpperCase()} ${iLocal.str} ${user.id}`)
+                .append(`<span>${iLocal.hora}</span>`)
+                .append(`<span class="p${iLocal.paisCat}">${iLocal.str}</span>`)
+                .append(`<span>[${user.cn}|${user.vi}]</span>`)
                 .append(`<a onclick="favorito(this);">F</a>`)
                 .append(`<a onclick="salta(this);">S</a>`)
                 .append(`<a onclick="bloquea(this);">B</a>`)
-                .attr("title", user.na)
+                .attr("title", `${user.id} - ${user.na}`)
         );
     }
 
@@ -296,17 +314,25 @@
 
     window.salta = function (e) {
         let $p = $(e).parent();
-        $p.toggleClass("sa", marcar($p, "salt"));
+        let est = marcar($p, "salt", 3);
+        $p.toggleClass("sa", est);
+        if (est) {
+            aplicarRuleta(0, "next");
+        }
     };
 
     window.bloquea = function (e) {
         let $p = $(e).parent();
-        $p.toggleClass("bl", marcar($p, "bloq"));
+        let est = marcar($p, "bloq");
+        $p.toggleClass("bl", est);
+        if (est) {
+            aplicarRuleta(0, "next"); //  TODO Es correcta la función next??
+        }
     };
 
-    function marcar ($target, propiedad) {
+    function marcar ($target, propiedad, valor) {
         var id = $target.data("id");
-        var obj = storage.set(id, propiedad);
+        var obj = storage.set(id, propiedad, valor);
         return obj[propiedad];
     }
 

@@ -57,7 +57,7 @@ nav > button {
     top: 0;
     left: 5rem;
     max-width: 35rem;
-    opacity: .15;
+    opacity: .45;
     background-color: #fff;
     overflow: hidden;
     max-height: 2.5rem;
@@ -75,6 +75,7 @@ nav > button {
 .fila {
     padding: .15rem;
     cursor: pointer;
+    border-left: 7px solid #333;
 }
 
 .fila:hover {
@@ -85,8 +86,8 @@ nav > button {
     background-color: #bbb;
 }
 
-.fila > a {
-    padding: 0 .35rem;
+.fila > * {
+    padding-right: .35rem;
 }
 
 .fila > a:hover {
@@ -94,12 +95,23 @@ nav > button {
     color: #fff;
 }
 
+.fila.gF { border-color: violet; }
+.fila.gC { border-color: cyan; }
+
 .vi::before {
     content: '>';
     margin-right: .5rem;
+}
+
+.sa::before {
+    content: 'X';
 }
 
 #contador {
     background-color: #bbb;
     text-align: center;
 }
+
+.p1 { background-color: yellowgreen; }
+.p2 { background-color: darksalmon; }
+.p3 { background-color: firebrick; }
