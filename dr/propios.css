@@ -63,6 +63,7 @@ nav > button {
     max-height: 2.5rem;
     padding: .15rem;
     z-index: 10000;
+    font-family: sans-serif;
     font-size: small;
 }
 
@@ -76,6 +77,7 @@ nav > button {
     padding: .15rem;
     cursor: pointer;
     border-left: 7px solid #333;
+    width: 100%;
 }
 
 .fila:hover {

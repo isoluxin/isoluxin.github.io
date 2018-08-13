@@ -250,8 +250,11 @@
         }
     }
 
-    function aplicarRuleta (indice, funcion, parametro) {
-        RLTS[indice][funcion](parametro);
+    function aplicarRuleta (indice, funcion, parametro, id) {
+        let haz = !id || (RLTS[indice].remoteDescription().Id === id);
+        if (haz) {
+            RLTS[indice][funcion](parametro);
+        }
     }
 
     function infoLocal (user) {
@@ -263,7 +266,9 @@
             }(),
             pais: user.pa,
             paisStr: paisStr,
-            paisCat: pais.p || 4,
+            paisCat: function () {
+                return pais.p || 4;
+            }(),
             idioma: function () {
                 if (pais) {
                     if (pais.l) {
@@ -314,25 +319,20 @@
 
     window.salta = function (e) {
         let $p = $(e).parent();
-        let est = marcar($p, "salt", 3);
-        $p.toggleClass("sa", est);
-        if (est) {
-            aplicarRuleta(0, "next");
-        }
+        $p.toggleClass("sa", marcar($p, "salt", 3, "next"));
     };
 
     window.bloquea = function (e) {
         let $p = $(e).parent();
-        let est = marcar($p, "bloq");
-        $p.toggleClass("bl", est);
-        if (est) {
-            aplicarRuleta(0, "next"); //  TODO Es correcta la función next??
-        }
+        $p.toggleClass("bl", marcar($p, "bloq", null, "next"));
     };
 
-    function marcar ($target, propiedad, valor) {
+    function marcar ($target, propiedad, valor, fnc) {
         var id = $target.data("id");
         var obj = storage.set(id, propiedad, valor);
+        if (obj[propiedad] === true && fnc) {
+            aplicarRuleta(0, fnc, id);
+        }
         return obj[propiedad];
     }
 
