@@ -252,6 +252,7 @@
 
     function aplicarRuleta (indice, funcion, parametro, id) {
         let haz = !id || (RLTS[indice].remoteDescription().Id === id);
+        console.log(id, RLTS[indice].remoteDescription().Id, haz);
         if (haz) {
             RLTS[indice][funcion](parametro);
         }
@@ -267,7 +268,10 @@
             pais: user.pa,
             paisStr: paisStr,
             paisCat: function () {
-                return pais.p || 4;
+                if (pais && pais.p) {
+                    return pais.p;
+                }
+                return 4;
             }(),
             idioma: function () {
                 if (pais) {
