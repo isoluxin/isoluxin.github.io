@@ -166,6 +166,7 @@
                     break;
 
                 case "reset":
+                    $("#hud > .fila.vi").removeClass("vi");
                     guardarChat();
                     rlt.user = null;
                     rlt.iLocal = null;
@@ -212,7 +213,7 @@
     }
 
     function audioConexion (user) {
-        if (user.co === RLTS[0].localDescription().State) {  //TODO PROBAR
+        if (user.co === RLTS[0].localDescription().State) {
             audio5.play();
         } else if (user.ge === "f") {
             audio3.play();
@@ -225,7 +226,7 @@
 
     function conexionRealizada (user) {
         user.cn = user.cn + 1;
-        user.vi.push(Date.now());
+        user.vi.push(new Date().toLocaleTimeString());  //  TODO Sólo para ver
         storage.set(user.id, null, user);
         $("#hud > .fila.vi").removeClass("vi");
         $("#hud > .fila:first-child").addClass("vi");
@@ -251,8 +252,11 @@
     }
 
     function aplicarRuleta (indice, funcion, parametro, id) {
-        let haz = !id || (RLTS[indice].remoteDescription().Id === id);
-        console.log(id, RLTS[indice].remoteDescription().Id, haz);
+        let haz = false;
+        if (id && RLTS[indice].remoteDescription()) {
+            haz = RLTS[indice].remoteDescription().Id === id;
+            console.log(id, RLTS[indice].remoteDescription().Id, haz);
+        }
         if (haz) {
             RLTS[indice][funcion](parametro);
         }
@@ -308,11 +312,11 @@
                 .data("id", user.id)
                 .append(`<span>${iLocal.hora}</span>`)
                 .append(`<span class="p${iLocal.paisCat}">${iLocal.str}</span>`)
-                .append(`<span>[${user.cn}|${user.vi}]</span>`)
+                .append(`<span>[${user.cn + 1}]</span>`)
                 .append(`<a onclick="favorito(this);">F</a>`)
                 .append(`<a onclick="salta(this);">S</a>`)
                 .append(`<a onclick="bloquea(this);">B</a>`)
-                .attr("title", `${user.id} - ${user.na}`)
+                .attr("title", `${user.id} - ${user.na}\n${user.vi}`)
         );
     }
 
