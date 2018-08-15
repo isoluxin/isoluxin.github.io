@@ -339,7 +339,7 @@
         var id = $target.data("id");
         var obj = storage.set(id, propiedad, valor);
         if (obj[propiedad] === true && fnc) {
-            aplicarRuleta(0, fnc, id);
+            aplicarRuleta(0, fnc, null, id);
         }
         return obj[propiedad];
     }
