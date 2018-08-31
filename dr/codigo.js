@@ -342,7 +342,7 @@
     };
 
     function marcar ($target, propiedad, valor, fnc) {
-        if (!target) {
+        if ($target.length === 0) {
             return;
         }
         var id = $target.data("id");
