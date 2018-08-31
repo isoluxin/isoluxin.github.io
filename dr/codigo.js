@@ -28,7 +28,6 @@
         "GT": {"p": 2, "h": -6, "n": "Guatemala", "l": 1},
         "DO": {"p": 2, "h": -4, "l": 1},
         "BR": {"p": 2, "h": -3, "l": 0},
-    
         /* 3 */
         "FR": {"p": 3},
         "PT": {"p": 3, "h": 0},
@@ -49,7 +48,8 @@
         "SE": {"n": "Sweden"},
         "CH": {"n": "Switzerland"},
         "TH": {"n": "Thailand"},
-        "AU": {"h": 10}
+        "AU": {"h": 10},
+        "IN": {"h": 5.5}
     };
 
     const GENEROS = {"m": "male", "c": "couple", "f": "female"};
@@ -93,6 +93,11 @@
         $("#localVideo").on(EV_CLC, function () {
             $(this).toggleClass("max");
         });
+        $(".cw_girls")
+            .prepend(`<button class="blue_btn trns" onclick="favorito(this);">fv</button>`)
+            .prepend(`<button class="red_btn trns" onclick="salta(this);">slt</button>`)
+            .prepend(`<button class="red_btn trns" onclick="bloquea(this);">bl</button>`)
+        ;
 
         function filtrarPorGenero () {
             $("button[data-f]").removeClass(CL_ON);
@@ -167,6 +172,7 @@
 
                 case "reset":
                     $("#hud > .fila.vi").removeClass("vi");
+                    $(".rlt-chat-typing").hide();
                     guardarChat();
                     rlt.user = null;
                     rlt.iLocal = null;
@@ -226,10 +232,10 @@
 
     function conexionRealizada (user) {
         user.cn = user.cn + 1;
-        user.vi.push(new Date().toLocaleTimeString());  //  TODO Sólo para ver
+        user.vi.push(Date.now());
         storage.set(user.id, null, user);
         $("#hud > .fila.vi").removeClass("vi");
-        $("#hud > .fila:first-child").addClass("vi");
+        $("#hud > .fila:first-child").addClass("vi mo");
     }
 
     function guardarChat () {
@@ -307,35 +313,38 @@
             $("<div>")
                 .addClass(`fila g${user.ge.toUpperCase()}`)
                 .toggleClass("bl", user["bloq"] === true)
-                .toggleClass("fa", user["fav"] === true)
+                .toggleClass("fav", user["fav"] === true)
                 .toggleClass("sa", user["salt"] > 0)
                 .data("id", user.id)
                 .append(`<span>${iLocal.hora}</span>`)
                 .append(`<span class="p${iLocal.paisCat}">${iLocal.str}</span>`)
-                .append(`<span>[${user.cn + 1}]</span>`)
+                .append(`<span>[${user.cn === 0 ? "*" : (user.cn + 1)}]</span>`)
                 .append(`<a onclick="favorito(this);">F</a>`)
                 .append(`<a onclick="salta(this);">S</a>`)
                 .append(`<a onclick="bloquea(this);">B</a>`)
-                .attr("title", `${user.id} - ${user.na}\n${user.vi}`)
+                .attr("title", `${user.id} - ${user.na}\n${user.vi.map(function (a) { return new Date(a).toLocaleTimeString(); })}`)
         );
     }
 
     window.favorito = function (e) {
-        let $p = $(e).parent();
-        $p.toggleClass("fa", marcar($p, "fav"));
+        let $p = (e.tagName === "BUTTON") ? $("#hud .vi") : $(e).parent();
+        $p.toggleClass("fav", marcar($p, "fav"));
     };
 
     window.salta = function (e) {
-        let $p = $(e).parent();
-        $p.toggleClass("sa", marcar($p, "salt", 3, "next"));
+        let $p = (e.tagName === "BUTTON") ? $("#hud .vi") : $(e).parent();
+        $p.toggleClass("sa", marcar($p, "salt", 2, "next"));
     };
 
     window.bloquea = function (e) {
-        let $p = $(e).parent();
+        let $p = (e.tagName === "BUTTON") ? $("#hud .vi") : $(e).parent();
         $p.toggleClass("bl", marcar($p, "bloq", null, "next"));
     };
 
     function marcar ($target, propiedad, valor, fnc) {
+        if (!target) {
+            return;
+        }
         var id = $target.data("id");
         var obj = storage.set(id, propiedad, valor);
         if (obj[propiedad] === true && fnc) {
@@ -378,6 +387,19 @@
             return key;
         }
     };
+
+    window.limpiarStorage = function () {
+        let keys = Object.keys(localStorage);
+        for (let k of keys) {
+            if (!k.startsWith("dr_u_")) {
+                continue;
+            }
+            let obj = JSON.parse(localStorage[k]);
+            if (obj.vi && obj.vi.length > 0) {
+                console.log(k, obj.vi[obj.vi.length - 1]);
+            }
+        }
+    }
 /*
     window.addHud = function () {
         var simulacion = [

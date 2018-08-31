@@ -43,7 +43,7 @@ nav > button {
     background-color: lime !important;
 }
 
-.fa {
+.fav {
     background-color: yellow !important;
 }
 
@@ -81,7 +81,7 @@ nav > button {
 }
 
 .fila:hover {
-    padding-left: .5rem;
+    border-right: 5px solid #258030;
 }
 
 .fila:nth-child(2n) {
@@ -89,7 +89,7 @@ nav > button {
 }
 
 .fila > * {
-    padding-right: .35rem;
+    padding: .15rem .35rem;
 }
 
 .fila > a:hover {
@@ -100,9 +100,12 @@ nav > button {
 .fila.gF { border-color: violet; }
 .fila.gC { border-color: cyan; }
 
+.mo::before {
+    content: '-';
+}
+
 .vi::before {
     content: '>';
-    margin-right: .5rem;
 }
 
 .sa::before {
@@ -114,6 +117,6 @@ nav > button {
     text-align: center;
 }
 
-.p1 { background-color: yellowgreen; }
-.p2 { background-color: darksalmon; }
-.p3 { background-color: firebrick; }
+.p1 { background-color: #baf542; }
+.p2 { background-color: #f5b668; }
+.p3 { background-color: #ff3228; }

@@ -40,3 +40,7 @@ video {
 .cw_girls {
     text-align: center;
 }
+
+.cw_girls button {
+    padding: 6px 10px;
+}
