@@ -343,7 +343,7 @@
 
     function marcar ($target, propiedad, valor, fnc) {
         if ($target.length === 0) {
-            return;
+            $target = $("#hud div:first-child");
         }
         var id = $target.data("id");
         var obj = storage.set(id, propiedad, valor);
@@ -362,16 +362,23 @@
                 user = valor;
             }
             //console.log("storage-set", user);
-            localStorage["dr_u_" + id] = JSON.stringify(user);
+            localStorage[user.ke] = JSON.stringify(user);
             return user;
         },
         get: function (data) {
-            var user = localStorage["dr_u_" + data.Id];
+            var idKey = "dr_u_" + data.Id;
+            var user = localStorage[idKey];
+            if (!user) {
+                idKey = idSimilar(idKey);
+                user = localStorage[idKey];
+            }
             if (user) {
+                user.ke = idKey;
                 return JSON.parse(user);
             }
             return {
                 id: data.Id,
+                ke: idKey,
                 ge: data.Gender,
                 pa: data.Country,
                 co: data.State,
@@ -388,17 +395,12 @@
         }
     };
 
-    window.limpiarStorage = function () {
-        let keys = Object.keys(localStorage);
-        for (let k of keys) {
-            if (!k.startsWith("dr_u_")) {
-                continue;
-            }
-            let obj = JSON.parse(localStorage[k]);
-            if (obj.vi && obj.vi.length > 0) {
-                console.log(k, obj.vi[obj.vi.length - 1]);
-            }
-        }
+    function idSimilar (id) {
+        id = id.substring(0, id.length - 2);
+        let clave = Object.keys(localStorage).find(function (e) {
+            return e.startsWith(id);
+        });
+        return clave ? clave : id;
     }
 /*
     window.addHud = function () {
