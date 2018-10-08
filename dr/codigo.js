@@ -148,7 +148,7 @@
         rlt.onStatus = function (status, data) {
             switch (status) {
                 case "peerFound":
-                    console.log("rltController-peerFound", data);
+                    //console.log("rltController-peerFound", data);
                     rlt.user = storage.get(data);
                     rlt.iLocal = infoLocal(rlt.user);
                     addToHud(rlt.user, rlt.iLocal);
@@ -188,6 +188,7 @@
         rlt.onChat = function (p1, p2) {
             bakOnChat(p1, p2);
             audio4.play();
+            console.log("chat", p1, p2);
         };
     }
 
@@ -327,22 +328,22 @@
     }
 
     window.favorito = function (e) {
-        let $p = (e.tagName === "BUTTON") ? $("#hud .vi") : $(e).parent();
-        $p.toggleClass("fav", marcar($p, "fav"));
+        marcar(e, "fav", null, null, "fav");
     };
 
     window.salta = function (e) {
-        let $p = (e.tagName === "BUTTON") ? $("#hud .vi") : $(e).parent();
-        $p.toggleClass("sa", marcar($p, "salt", 2, "next"));
+        marcar(e, "salt", 2, "next", "sa");
     };
 
     window.bloquea = function (e) {
-        let $p = (e.tagName === "BUTTON") ? $("#hud .vi") : $(e).parent();
-        $p.toggleClass("bl", marcar($p, "bloq", null, "next"));
+        marcar(e, "bloq", null, "next", "bl");
     };
 
-    function marcar ($target, propiedad, valor, fnc) {
-        if ($target.length === 0) {
+    function marcar (evn, propiedad, valor, fnc, stl) {
+        var $target;
+        if (evn && evn.tagName !== "BUTTON") {
+            $target = $($evn).parent();
+        } else {
             $target = $("#hud div:first-child");
         }
         var id = $target.data("id");
@@ -350,7 +351,9 @@
         if (obj[propiedad] === true && fnc) {
             aplicarRuleta(0, fnc, null, id);
         }
-        return obj[propiedad];
+        if (stl) {
+            $target.toggleClass(stl, obj[propiedad]);
+        }
     }
 
     window.storage = {
@@ -361,7 +364,6 @@
             } else {
                 user = valor;
             }
-            //console.log("storage-set", user);
             localStorage[user.ke] = JSON.stringify(user);
             return user;
         },
