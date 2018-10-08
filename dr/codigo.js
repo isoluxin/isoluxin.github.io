@@ -342,7 +342,7 @@
     function marcar (evn, propiedad, valor, fnc, stl) {
         var $target;
         if (evn && evn.tagName !== "BUTTON") {
-            $target = $($evn).parent();
+            $target = $(evn).parent();
         } else {
             $target = $("#hud div:first-child");
         }
