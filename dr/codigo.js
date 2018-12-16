@@ -194,13 +194,13 @@
 
     function guiDRConnected (user, iLocal) {
         $("#remoteVideo").show();
-        $("#flag")
+        $("#rv_info > .flag")
             .html(iLocal.str)
             .removeClass(function (index, className) {
                 return (className.match (/(^|\s)flag-\S+/g) || []).join(' ');
             })
             .addClass(`flag flag-${iLocal.pais.toLowerCase()}`);
-        $("#gender")
+        $("#rv_info > .rlt-gender")
             .removeClass(function (index, className) {
                 return (className.match (/(^|\s)gndr_\S+/g) || []).join(' ');
             })
